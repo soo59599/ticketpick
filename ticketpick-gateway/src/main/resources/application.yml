@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: ticketpick-gateway
+  
+  cloud:
+    gateway:
+      routes:
+        # Command 서비스 라우팅
+        - id: command-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/reservations/**
+            - Method=POST,DELETE,PUT,PATCH
+          filters:
+            - RewritePath=/api/reservations/(?<segment>.*), /api/command/reservations/$\{segment}
+        
+        # Query 서비스 라우팅
+        - id: query-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/games/**,/api/seats/**
+            - Method=GET
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,gateway
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

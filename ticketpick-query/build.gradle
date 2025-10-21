@@ -1,0 +1,19 @@
+dependencies {
+    // Common 모듈 의존
+    implementation project(':ticketpick-common')
+
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // H2
+    runtimeOnly 'com.h2database:h2'
+}

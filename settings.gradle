@@ -1,0 +1,6 @@
+rootProject.name = 'ticketpick'
+
+include 'ticketpick-common'
+include 'ticketpick-command'
+include 'ticketpick-query'
+include 'ticketpick-gateway'
