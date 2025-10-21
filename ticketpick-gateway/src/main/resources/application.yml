@@ -7,7 +7,7 @@ spring:
       routes:
         # Query - 경기
         - id: query-games
-          uri: http://localhost:8082
+          uri: http://query-service:8082
           predicates:
             - Path=/api/games/**
           filters:
@@ -16,7 +16,7 @@ spring:
         
         # Query - 좌석
         - id: query-seats
-          uri: http://localhost:8082
+          uri: http://query-service:8082
           predicates:
             - Path=/api/seats/**
           filters:
@@ -25,7 +25,7 @@ spring:
         
         # Command - 예매/취소
         - id: command-reservations
-          uri: http://localhost:8081
+          uri: http://command-service:8081
           predicates:
             - Path=/api/reservations/**
           filters:

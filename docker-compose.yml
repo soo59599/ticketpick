@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Command Service (쓰기)
+  command-service:
+    build:
+      context: .
+      dockerfile: ticketpick-command/Dockerfile
+    container_name: ticketpick-command
+    ports:
+      - "8081:8081"
+    networks:
+      - ticketpick-network
+
+  # Query Service (읽기)
+  query-service:
+    build:
+      context: .
+      dockerfile: ticketpick-query/Dockerfile
+    container_name: ticketpick-query
+    ports:
+      - "8082:8082"
+    networks:
+      - ticketpick-network
+
+  # API Gateway
+  gateway:
+    build:
+      context: .
+      dockerfile: ticketpick-gateway/Dockerfile
+    container_name: ticketpick-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - ticketpick-network
+    depends_on:
+      - command-service
+      - query-service
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ticketpick-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - ticketpick-network
+    depends_on:
+      - gateway
+      - command-service
+      - query-service
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ticketpick-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - ticketpick-network
+    depends_on:
+      - prometheus
+
+networks:
+  ticketpick-network:
+    driver: bridge

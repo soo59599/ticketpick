@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # API Gateway
+  - job_name: 'ticketpick-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['gateway:8080']
+        labels:
+          service: 'gateway'
+  
+  # Command Service
+  - job_name: 'ticketpick-command'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['command-service:8081']
+        labels:
+          service: 'command'
+  
+  # Query Service
+  - job_name: 'ticketpick-query'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['query-service:8082']
+        labels:
+          service: 'query'
