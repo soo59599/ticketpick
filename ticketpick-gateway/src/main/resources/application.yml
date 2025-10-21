@@ -5,30 +5,38 @@ spring:
   cloud:
     gateway:
       routes:
-        # Command 서비스 라우팅
-        - id: command-service
+        # Query - 경기
+        - id: query-games
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/games/**
+          filters:
+            - StripPrefix=1
+            - PrefixPath=/api/query
+        
+        # Query - 좌석
+        - id: query-seats
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/seats/**
+          filters:
+            - StripPrefix=1
+            - PrefixPath=/api/query
+        
+        # Command - 예매/취소
+        - id: command-reservations
           uri: http://localhost:8081
           predicates:
             - Path=/api/reservations/**
-            - Method=POST,DELETE,PUT,PATCH
           filters:
-            - RewritePath=/api/reservations/(?<segment>.*), /api/command/reservations/$\{segment}
-        
-        # Query 서비스 라우팅
-        - id: query-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/games/**,/api/seats/**
-            - Method=GET
+            - StripPrefix=1
+            - PrefixPath=/api/command
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info,prometheus,metrics,gateway
-  metrics:
-    tags:
-      application: ${spring.application.name}
 
 server:
   port: 8080
