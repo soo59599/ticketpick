@@ -2,6 +2,12 @@ spring:
   application:
     name: ticketpick-query
   
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: admin
+    password: admin
+  
   h2:
     console:
       enabled: true

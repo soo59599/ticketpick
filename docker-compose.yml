@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Command Service (쓰기)
   command-service:
     build:
       context: .
@@ -11,8 +10,9 @@ services:
       - "8081:8081"
     networks:
       - ticketpick-network
+    depends_on:
+      - rabbitmq
 
-  # Query Service (읽기)
   query-service:
     build:
       context: .
@@ -22,8 +22,9 @@ services:
       - "8082:8082"
     networks:
       - ticketpick-network
+    depends_on:
+      - rabbitmq
 
-  # API Gateway
   gateway:
     build:
       context: .
@@ -37,7 +38,18 @@ services:
       - command-service
       - query-service
 
-  # Prometheus
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ticketpick-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    networks:
+      - ticketpick-network
+
   prometheus:
     image: prom/prometheus:latest
     container_name: ticketpick-prometheus
@@ -52,7 +64,6 @@ services:
       - command-service
       - query-service
 
-  # Grafana
   grafana:
     image: grafana/grafana:latest
     container_name: ticketpick-grafana
@@ -60,7 +71,6 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - ticketpick-network
     depends_on:
