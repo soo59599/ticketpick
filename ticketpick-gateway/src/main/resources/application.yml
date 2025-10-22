@@ -5,7 +5,6 @@ spring:
   cloud:
     gateway:
       routes:
-        # Query - 경기
         - id: query-games
           uri: http://query-service:8082
           predicates:
@@ -14,7 +13,6 @@ spring:
             - StripPrefix=1
             - PrefixPath=/api/query
         
-        # Query - 좌석
         - id: query-seats
           uri: http://query-service:8082
           predicates:
@@ -23,7 +21,6 @@ spring:
             - StripPrefix=1
             - PrefixPath=/api/query
         
-        # Command - 예매/취소
         - id: command-reservations
           uri: http://command-service:8081
           predicates:
@@ -36,7 +33,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus,metrics,gateway
+        include: health,info,prometheus,gateway
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 server:
   port: 8080

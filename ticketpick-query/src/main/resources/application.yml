@@ -15,12 +15,12 @@ spring:
   
   jpa:
     hibernate:
-      ddl-auto: create  # create로 변경! (테이블 자동 생성)
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true  # ⭐ 이게 핵심!
+    defer-datasource-initialization: true
   
   sql:
     init:
@@ -31,7 +31,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus,metrics
+        include: health,info,prometheus
   metrics:
     tags:
       application: ${spring.application.name}
