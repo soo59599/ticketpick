@@ -8,6 +8,8 @@ services:
     container_name: ticketpick-command
     ports:
       - "8081:8081"
+    env_file:
+      - .env
     networks:
       - ticketpick-network
     depends_on:
@@ -20,6 +22,8 @@ services:
     container_name: ticketpick-query
     ports:
       - "8082:8082"
+    env_file:
+      - .env
     networks:
       - ticketpick-network
     depends_on:
@@ -32,6 +36,8 @@ services:
     container_name: ticketpick-gateway
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     networks:
       - ticketpick-network
     depends_on:
@@ -45,8 +51,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     networks:
       - ticketpick-network
 
@@ -70,7 +76,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     networks:
       - ticketpick-network
     depends_on:
