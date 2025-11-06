@@ -9,7 +9,7 @@ COPY . .
 RUN gradle :ticketpick-query:bootJar -x test
 
 # Runtime stage
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/ticketpick-query/build/libs/*.jar app.jar
 EXPOSE 8082
